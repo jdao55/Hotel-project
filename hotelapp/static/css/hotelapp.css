@@ -8,3 +8,97 @@ input::-webkit-inner-spin-button {
 input[type=number] {
     -moz-appearance:textfield; /* Firefox */
 }
+
+html {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background-image: url('bg.gif');
+	background-repeat: repeat;
+	color: #FFFFFF;
+}
+
+#welcome-msg {
+	font-size: 54px;
+	text-align: center;
+	text-decoration: underline;
+	font-style: italic;
+	-moz-transform:translateX(100%);
+	-webkit-transform:translateX(100%);    
+	transform:translateX(100%);
+	/* Apply animation to this element */    
+	-moz-animation: welcome-msg 15s linear infinite;
+	-webkit-animation: welcome-msg 15s linear infinite;
+	animation: welcome-msg 15s linear infinite;
+	font-family: 'Futura';
+	color: #fff;
+	text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080;
+}
+
+/* Move it (define the animation) */
+@-moz-keyframes welcome-msg {
+	0%   { -moz-transform: translateX(100%); }
+	100% { -moz-transform: translateX(-100%); }
+}
+@-webkit-keyframes welcome-msg {
+	0%   { -webkit-transform: translateX(100%); }
+	100% { -webkit-transform: translateX(-100%); }
+}
+@keyframes welcome-msg {
+	0%   { 
+	-moz-transform: translateX(100%); /* Firefox bug fix */
+	-webkit-transform: translateX(100%); /* Firefox bug fix */
+	transform: translateX(100%);         
+	}
+	100% { 
+	-moz-transform: translateX(-100%); /* Firefox bug fix */
+	-webkit-transform: translateX(-100%); /* Firefox bug fix */
+	transform: translateX(-100%); 
+	}
+}
+
+h2 {
+	text-decoration: underline;
+	font-style: italic;
+	font-family: 'Futura';
+	color: #fff;
+	text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080;
+}
+
+table {
+	border: 3px cyan ridge;
+	margin-bottom: 10px;
+}
+
+table th {
+	border: 3px cyan ridge;
+}
+
+table tr {
+	border: 3px cyan ridge;
+}
+
+table tr:nth-child(even) {
+	background-color: #7cb6cc;
+}
+
+table tr:nth-child(odd) {
+	background-color: #8c86cc;
+}
+
+.fixed-table-footer table {
+	border: none;
+}
+
+.menu-bar {
+	border-bottom: 2px lightpink solid;
+}
+
+#hotel-img {
+	width: 50%;
+	display: block;
+	margin: 0 auto;
+	border: 2px cyan solid;
+}

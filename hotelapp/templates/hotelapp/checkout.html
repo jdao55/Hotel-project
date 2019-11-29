@@ -1,0 +1,63 @@
+{% extends 'hotelapp/base_generic.html' %}
+{% block content %}
+<script>
+ function submit_checkout(r){
+     var room = document.getElementById("id_res_id");
+     room.setAttribute('value', r);
+     var x = document.getElementById("submit_form");
+     x.submit();
+ }
+
+</script>
+<div class = "" >
+    <h2>Checkouts This week</h2>
+    <table  data-toggle="table"
+            data-flat="true"
+            data-search="true"
+            class="w3-table">
+        <thead>
+            <tr>
+                <th data-sortable="true">Customer name</th>
+                <th data-sortable="true">Hotel name</th>
+                <th>Room number</th>
+                <th>Floor</th>
+                <th data-sortable="true">Checkin</th>
+                <th data-sortable="true">Checkout</th>
+                <th>Total due</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody
+            {% for obj in query %}
+            <tr>
+                <td>{{obj.customer.name}}</td>
+                <td>{{obj.room.hotel.name}}</td>
+                <td>{{obj.room.room_number}}</td>
+                <td>{{obj.room.room_floor}}</td>
+                <td>{{obj.checkin_date}}</td>
+                <td>{{obj.checkout_date}}</td>
+                <td>{{obj.total_charges}}</td>
+                <td>
+                    <label>
+                        <button type="button"  onclick="submit_checkout({{obj.reservation_id}})">
+                            Checkout
+                        </button>
+                    </label>
+
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <form class="site-form" id="submit_form" action="/checkout" method="post">
+        {% csrf_token %}
+        <table  class="w3-table">
+            {{ form.as_table }}
+        </table>
+
+    </form>
+
+
+
+</div>
+{% endblock %}

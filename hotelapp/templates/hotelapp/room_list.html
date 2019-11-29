@@ -1,65 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
+{% extends 'hotelapp/base_generic.html' %}
+{% block content %}
+<script>
+ function set_room(r){
+     var room = document.getElementById("id_roomid");
+     room.setAttribute('value', r);
+     var x = document.getElementById("submit_form");
+     if (x.style.display === "none") {
+         x.style.display = "block";
+     }
+ }
+</script>
+<div class = "newuser-form" >
 
-
-        {% block title %}<title>Reservations This week</title>{% endblock %}
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script>
-         function set_room(r){
-             var room = document.getElementById("id_roomid");
-             room.setAttribute('value', r);
-         }
-
-        </script>
-
-        <!-- Add additional CSS in static file -->
-        {% load static %}
-        <link rel="stylesheet" href="{% static 'css/materialize/css/materialize.css' %}">
-    </head>
-    <body>
-        {% block content %}
-        <div class = "newuser-form" >
-
-            <table style="max-width: 900px">
-                <th>Hotel</th>
+    <table data-toggle="table"
+           data-flat="true"
+           data-search="true"
+           class="w3-table">
+        <thead>
+            <tr>
+                <th data-sortable="true"> Hotel </th>
                 <th>room number</th>
                 <th>room floor</th>
                 <th>room type</th>
+                <th data-sortable="true">Price Daily</th>
+                <th data-sortable="true"> Price Weekly</th>
                 <th>Has balcony</th>
                 <th>select room</th>
-                {% for q in query %}
-                <tr>
-                    <td>{{ q.hotel}}</td>
-                    <td>{{q.room_number}}</td>
-                    <td> {{ q.room_floor}}</td>
-                    <td> {{ q.room_type}} </td>
-                    <td> {{ q.has_balcony}} </td>
-                    <td>
-                        <label>
-                            <input type="radio" name="gender" onclick="set_room({{q.room_id}})" value="{{q.room_id}}">
-                            <span></span>
-                        </label>
+            </tr>
+        </thead>
+        <tbody>
+            {% for q in query %}
+            <tr>
+                <td> {{ q.hotel}}</td>
+                <td> {{q.room_number}}</td>
+                <td> {{ q.room_floor}}</td>
+                <td> {{ q.room_type}} </td>
+                <td> {{ q.room_rate_nightly }} </td>
+                <td> {{ q.room_rate_weekly }} </td>
+                <td> {{ q.has_balcony}} </td>
+                <td>
+                    <label>
+                        <input type="radio" name="select-room" onclick="set_room({{q.room_id}})" value="{{q.room_id}}">
+                        <span></span>
+                    </label>
 
-                    </td>
-                </tr>
-                {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
 
-                <table/>
-                <form class="site-form" action="/select-room" method="post">
-                    {% csrf_token %}
-                    <table>
-                        {{ room.as_table }}
-                        <table/>
-                        <input type="submit" value="submit">
-                </form>
+    </table>
+    <form class="site-form" action="/select-room" method="post">
+        {% csrf_token %}
+        <table>
+            {{ room.as_table }}
+        </table>
+        <input style="display: none;" id="submit_form" type="submit" value="submit">
+    </form>
 
 
-        </div>
-        {% endblock %}
-    </body>
-</html>
+</div>
+{% endblock %}

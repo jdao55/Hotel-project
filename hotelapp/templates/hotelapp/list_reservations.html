@@ -1,57 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
+{% extends 'hotelapp/base_generic.html' %}
+{% block content %}
+<div class = "" >
+    <h2>Reservations Today</h2>
+    <table  class="w3-table"
+            data-toggle="table"
+            data-flat="true"
+            data-search="true"
+            class="w3-table">
+        <thead>
+            <tr>
+                <th>Customer name</th>
+                <th>Hotel name</th>
+                <th>Room number</th>
+                <th>Floor</th>
+                <th>Checkin</th>
+                <th>Checkout</th>
+                <th>Total due</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for obj in query %}
+        <tr>
+            <td>{{obj.customer.name}}</td>
+                <td>{{obj.room.hotel.name}}</td>
+                <td>{{obj.room.room_number}}</td>
+                <td>{{obj.room.room_floor}}</td>
+                <td>{{obj.checkin_date}}<br/></td>
+                <td>{{obj.checkout_date}}<br/></td>
+                <td>{{obj.total_charges}}<br/></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
 
-        {% block title %}<title>Reservations This week</title>{% endblock %}
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script>
-         function set_room(r){
-             var room = document.getElementById("id_roomid");
-             room.setAttribute('value', r);
-         }
-
-        </script>
-
-        <!-- Add additional CSS in static file -->
-        {% load static %}
-        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    </head>
-    <body>
-        {% block content %}
-        <div class = "newuser-form" >
-
-            <table style="width:60%">
-                <th>Hotel</th>
-                <th>room number</th>
-                <th>room floor</th>
-                <th>room type</th>
-                <th>select room</th>
-                {% for q in query %}
-                <tr>
-                    <td>{{ q.hotel}}</td>
-                    <td>{{q.room_number}}</td>
-                    <td> {{ q.room_floor}}</td>
-                    <td> {{ q.room_type}} </td>
-                    <td> <input type="radio" name="gender" onclick="set_room({{q.room_id}})" value="{{q.room_id}}">{{q.room_id}}</td>
-                </tr>
-                {% endfor %}
-
-                <table/>
-                <form class="site-form" action="/select-room" method="post">
-                    {% csrf_token %}
-                    <table>
-                        {{ room.as_table }}
-                     <table/>
-                        <input type="submit" value="submit">
-                </form>
-
-
-        </div>
-        {% endblock %}
-    </body>
-</html>
+</div>
+{% endblock %}

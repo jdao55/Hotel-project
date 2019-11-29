@@ -1,0 +1,47 @@
+{% extends 'hotelapp/base_generic.html' %}
+{% block content %}
+<div class = "newuser-form" >
+    <!-- <form class="site-form" action="/select-room" method="post">
+         {% csrf_token %}
+         <table>
+         {{ form.as_table }}
+         </table>
+         <input style="display: none;" id="submit_form" type="submit" value="submit">
+         </form> -->
+	<h2>Hotel Parking</h2>
+    <table data-toggle="table"
+           data-flat="true"
+           data-search="true"
+           class="w3-table">
+        <thead>
+            <tr>
+                <th> Space Id </th>
+                <th>Space Number</th>
+                <th  data-sortable="true">License Plate</th>
+                <th  data-sortable="true">Car Make</th>
+                <th data-sortable="true">Parking Lot</th>
+                <th data-sortable="true">Hotel</th>
+                <th  data-sortable="true">Customer Name</th>
+                <th  data-sortable="true">Room</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for q in query %}
+            <tr>
+                <td> {{ q.parking_space_id}}</td>
+                <td> {{q.space_number}}</td>
+                <td> {{ q.license_plate}}</td>
+                <td> {{ q.car_make}} </td>
+                <td> {{ q.parking_lot.name }} </td>
+                <td> {{ q.parking_lot.hotel.name }} </td>
+                <td> {{ q.customer.name}} </td>
+                <td> {{ q.room.room_id}} </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+
+</div>
+{% endblock %}
