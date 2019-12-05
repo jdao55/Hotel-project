@@ -6,7 +6,7 @@ from . import models
 from datetime import date, timedelta
 from django.utils import timezone
 from django.db import connection
-
+import logging
 
 def index(request):
     return render(request, "hotelapp/home.html")
@@ -60,13 +60,16 @@ def registration_form(request):
                 cursor.execute(fn_call)
 
                 #update space added
-                parking_space = models.ParkingSpace.objects.all().get(
-                    Q(parking_lot=lot_id) & Q(room=room_id)
-                    & Q(customer=user_id) & Q(car_make='') & Q(
+                try:
+                    parking_space = models.ParkingSpace.objects.all().get(
+                        Q(parking_lot=lot_id) & Q(room=room_id)
+                        & Q(customer=user_id) & Q(car_make='') & Q(
                         license_plate=''))
-                parking_space.car_make = form_data['car_make']
-                parking_space.license_plate = form_data['license_plate']
-                parking_space.save()
+                    parking_space.car_make = form_data['car_make']
+                    parking_space.license_plate = form_data['license_plate']
+                    parking_space.save()
+                except:
+                    logger.error("no parking availible")
             return render(request, "hotelapp/confirmation.html")
     else:
         form = forms.reserveForm()
@@ -121,13 +124,20 @@ def select_room(request):
 
 
 def todays_reservations(request):
-    print(date.today())
     todays_res = models.Reservation.objects.all().select_related(
         'customer').select_related('room').select_related(
             'room__hotel').filter(checkin_date__lte=date.today()).filter(
                 checkout_date__gte=date.today())
     return render(request, 'hotelapp/list_reservations.html',
                   {'query': todays_res})
+
+def reservations(request):
+    todays_res = models.Reservation.objects.all().select_related(
+        'customer').select_related('room').select_related(
+            'room__hotel')
+    return render(request, 'hotelapp/all_reservations.html',
+                  {'query': todays_res})
+
 
 
 def checkout(request):
@@ -171,9 +181,9 @@ def filter_hotels(form_data):
             hotels_list = hotels_list.filter(has_gym=False)
     if form_data['has_breakfast'] != '--':
         if form_data['has_breakfast'] != 'yes':
-            hotels_list = hotels_list.filter(has_breakfast=True)
+            hotels_list = hotels_list.filter(has_free_breakfast=True)
         else:
-            hotels_list = hotels_list.filter(has_breakfast=False)
+            hotels_list = hotels_list.filter(has_free_breakfast=False)
     if form_data['has_restaurant'] != '--':
         if form_data['has_restaurant'] != 'yes':
             hotels_list.filter(has_restaurant=True)
@@ -197,7 +207,6 @@ def filter_free_rooms(hotels_list, checkin, checkout):
 # probably a better way to do this
 def is_notfree(reservation, checkin, checkout):
     q_ci = reservation.checkin_date.date()
-    print(type(q_ci))
     q_co = reservation.checkout_date.date()
     if checkin >= q_ci and checkin <= q_co:
         return True
@@ -215,7 +224,6 @@ def get_user_id(name_, email_, phone_):
         user = models.Customer.objects.get(email=email_)
         return user.customer_id
     except:
-        print("error finding person")
         user = models.Customer.create(name_, email_, phone_)
         user.save()
         return user.customer_id

@@ -13,6 +13,10 @@ urlpatterns = [
         'todays-reservations',
         views.todays_reservations,
         name='todays-reservations'),
+    path(
+        'reservations',
+        views.reservations,
+        name='reservations'),
     path('checkout', views.checkout, name='checkout'),
     path('parking-spaces', views.parking_space, name='parking-spaces')
 ]
